@@ -64,23 +64,20 @@ return {
       end,
     })
 
+    local root_dir = vim.fn.getcwd()
     local capabilities = vim.lsp.protocol.make_client_capabilities()
     capabilities = vim.tbl_deep_extend('force', capabilities, require('cmp_nvim_lsp').default_capabilities())
 
-    -- Create a cmd using provided docker image
-    local makeCmd = function(image)
-      return { 'docker', 'run', '-i', '-a', 'stdin', '-a', 'stdout', '--rm', image }
-    end
-
     require('lspconfig').lua_ls.setup({
-      cmd = makeCmd('tikhoplav/lua-language-server'),
-      settings = {
-        Lua = {
-          completion = {
-             callSnippet = 'Replace',
-          },
-        },
-      },
+      cmd = { 'docker', 'run', '-i', '--rm', 'tikhoplav/lua-language-server' },
+      capabilities = capabilities,
+    })
+
+    require('lspconfig').vtsls.setup({
+      before_init = function(params)
+        params.processId = vim.NIL
+      end,
+      cmd = { 'docker', 'run', '-i', '--rm', '-v', root_dir .. ':' .. root_dir .. ':z', 'tikhoplav/vtsls-language-server' },
       capabilities = capabilities,
     })
   end,
