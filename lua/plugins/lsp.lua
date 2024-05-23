@@ -80,6 +80,14 @@ return {
       cmd = { 'docker', 'run', '-i', '--rm', '-v', root_dir .. ':' .. root_dir .. ':z', 'tikhoplav/vtsls-language-server' },
       capabilities = capabilities,
     })
+
+    require('lspconfig').solidity.setup({
+      before_init = function(params)
+        params.processId = vim.NIL
+      end,
+      cmd = { 'docker', 'run', '-i', '--rm', '-v', root_dir .. ':' .. root_dir .. ':z', 'tikhoplav/solidity-language-server' },
+      capabilities = capabilities,
+    })
   end,
 }
 
