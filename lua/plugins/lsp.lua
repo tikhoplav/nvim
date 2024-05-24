@@ -73,6 +73,20 @@ return {
       capabilities = capabilities,
     })
 
+    require('lspconfig').rust_analyzer.setup({
+      before_init = function(params)
+        params.processId = vim.NIL
+      end,
+      cmd = { 'docker', 'run', '-i', '--rm', '-v', root_dir .. ':' .. root_dir .. ':z', 'tikhoplav/rust-language-server' },
+      root_dir = function(fname)
+        local util = require('lspconfig').util
+
+        return util.root_pattern('Cargo.toml')(fname)
+          or util.find_git_ancestor(fname)
+      end,
+      capabilities = capabilities,
+    })
+
     require('lspconfig').vtsls.setup({
       before_init = function(params)
         params.processId = vim.NIL
