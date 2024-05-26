@@ -2,7 +2,11 @@
 vim.g.mapleader = ' '
 vim.g.mapcallleader = ' '
 
--- Enbable NerdFont icons and symbols
+-- Enable spell checker
+vim.opt.spell = true
+vim.opt.spelllang = 'en_us'
+
+-- Enable NerdFont icons and symbols
 vim.g.have_nerd_font = true
 
 -- Show line number
