@@ -26,12 +26,12 @@ return {
         map('K', vim.lsp.buf.hover, 'Hover Documentation')
         map('gD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
 
-        require('which-key').register({
-          ['<leader>c'] = { name = '[C]ode', _ = 'which_key_ignore' },
-          ['<leader>d'] = { name = '[D]ocument', _ = 'which_key_ignore' },
-          ['<leader>w'] = { name = '[W]orkspace', _ = 'which_key_ignore' },
-          ['<leader>r'] = { name = '[R]ename', _ = 'which_key_ignore' },
-          ['g'] = { name = '[G]oto', _ = 'which_key_ignore' },
+        require('which-key').add({
+          { '<leader>c', desc = '[C]ode' },
+          { '<leader>d', desc = '[D]ocument' },
+          { '<leader>w', desc = '[W]orkspace' },
+          { '<leader>r', desc = '[R]ename' },
+          { 'g', desc = '[G]oto' },
         })
 
         local client = vim.lsp.get_client_by_id(event.data.client_id)

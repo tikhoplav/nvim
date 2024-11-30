@@ -59,8 +59,8 @@ return {
       end, { desc = '[S]earch [N]eovim files' })
 
       -- Add keybinds helper to `which-key`
-      require('which-key').register({
-        ['<leader>s'] = { '[S]earch' , _ = 'which_key_ignore' },
+      require('which-key').add({
+        { '<leader>s', group = '[S]earch' },
       })
     end,
 }

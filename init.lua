@@ -69,6 +69,13 @@ vim.opt.rtp:prepend(lazypath)
 require('lazy').setup({
   'tpope/vim-sleuth', -- Auto detection of shiftwidth
 
+  { -- Comments toggle with `gcc`
+    'terrortylor/nvim-comment',
+    config = function()
+      require('nvim_comment').setup()
+    end
+  },
+
   { -- Highlight `TODO` and `NOTE` in comments
     'folke/todo-comments.nvim',
     event = 'VimEnter',

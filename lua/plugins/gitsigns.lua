@@ -56,15 +56,13 @@ return {
       map({'o', 'x'}, 'ih', ':<C-U>Gitsigns select_hunk<CR>')
 
       -- Add keybind helper to `which-key`
-      require('which-key').register({
-        ['<leader>gt'] = { '[G]it [T]oggle', _ = 'which_key_ignore' },
-        ['<leader>gh'] = { '[G]it [H]unk', _ = 'which_key_ignore' },
-        ['<leader>g'] = { '[G]it', _ = 'which_key_ignore' },
+      require('which-key').add({
+        { '<leader>gt', group = '[G]it [T]oggle' },
+        { '<leader>gh', group = '[G]it [H]unk' },
+        { '<leader>g', group = '[G]it' },
+        { '<leader>g', group = '[G]it', mode = 'v' },
       })
 
-      require('which-key').register({
-        ['<leader>g'] = { '[G]it' },
-      }, { mode = 'v' })
       end,
     },
 }
