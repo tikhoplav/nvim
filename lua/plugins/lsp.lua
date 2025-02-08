@@ -68,6 +68,11 @@ return {
     local capabilities = vim.lsp.protocol.make_client_capabilities()
     capabilities = vim.tbl_deep_extend('force', capabilities, require('cmp_nvim_lsp').default_capabilities())
 
+    require('lspconfig').clangd.setup({
+      cmd = { 'clangd' },
+      capabilities = capabilities,
+    })
+
     require('lspconfig').lua_ls.setup({
       cmd = { 'docker', 'run', '-i', '--rm', 'tikhoplav/lua-language-server' },
       capabilities = capabilities,
@@ -92,6 +97,27 @@ return {
         params.processId = vim.NIL
       end,
       cmd = { 'docker', 'run', '-i', '--rm', '-v', root_dir .. ':' .. root_dir .. ':z', 'tikhoplav/vtsls-language-server' },
+      filetypes = { 'typescript', 'javascript', 'javascriptreact', 'typescriptreact', 'vue' },
+      settings = {
+        vtsls = {
+          tsserver = {
+            globalPlugins = {
+              {
+                name = '@vue/typescript-plugin',
+                location = '/usr/local/lib/node_modules/@vue/language-server',
+                languages = { 'vue' },
+                configNamespace = "typescript",
+                enableForWorkspaceTypeScriptVersions = true,
+              },
+            },
+          },
+        },
+      },
+      capabilities = capabilities,
+    })
+
+    require('lspconfig').wgsl_analyzer.setup({
+      cmd = { 'docker', 'run', '-i', '--rm', 'tikhoplav/wgsl-language-server' },
       capabilities = capabilities,
     })
 
