@@ -1,8 +1,10 @@
 -- Plugin to automatically close html tags
--- Make sure 'nvim-treesitter' is installed 
 
 return {
   'windwp/nvim-ts-autotag',
+  dependencies = {
+    'nvim-treesitter/nvim-treesitter',
+  },
   config = function()
     require('nvim-ts-autotag').setup({
       opts = {

@@ -1,3 +1,7 @@
+-- Custom indent width 
+vim.opt.tabstop = 2
+vim.opt.shiftwidth = 2
+
 -- Set <space> as the leader key
 vim.g.mapleader = ' '
 vim.g.mapcallleader = ' '
@@ -44,6 +48,10 @@ vim.opt.scrolloff = 12
 vim.opt.hlsearch = true
 vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
 
+-- Keep lines selected after indentation
+vim.keymap.set('v', '<', '<gv', { desc = 'Unindent line'})
+vim.keymap.set('v', '>', '>gv', { desc = 'Indent line'})
+
 -- Diagnostic keymaps
 vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, { desc = 'Go to previous [D]iagnostic message' })
 vim.keymap.set('n', ']d', vim.diagnostic.goto_next, { desc = 'Go to next [D]iagnostic message' })
@@ -59,6 +67,18 @@ vim.api.nvim_create_autocmd('TextYankPost', {
   end,
 })
 
+-- Auto create dir when creating a file
+vim.api.nvim_create_autocmd('BufWritePre', {
+  desc = 'Create dir when creating a file',
+  group = vim.api.nvim_create_augroup('buf-write-pre', { clear = true }),
+  callback = function ()
+    local dir = vim.fn.expand('<afile>:p:h')
+    if vim.fn.isdirectory(dir) == 0 then
+      vim.fn.mkdir(dir, 'p')
+    end
+  end,
+})
+
 local lazypath = vim.fn.stdpath 'data' .. '/lazy/lazy.nvim'
 if not vim.loop.fs_stat(lazypath) then
   local lazyrepo = 'https://github.com/folke/lazy.nvim.git'
@@ -68,28 +88,6 @@ vim.opt.rtp:prepend(lazypath)
 
 require('lazy').setup({
   'tpope/vim-sleuth', -- Auto detection of shiftwidth
-
-  { -- Comments toggle with `gcc`
-    'terrortylor/nvim-comment',
-    config = function()
-      require('nvim_comment').setup()
-    end
-  },
-
-  { -- Highlight `TODO` and `NOTE` in comments
-    'folke/todo-comments.nvim',
-    event = 'VimEnter',
-    dependencies = { 'nvim-lua/plenary.nvim' },
-    opts = { signs = false },
-  },
-
-  { -- Helper, shows current keybinds
-    'folke/which-key.nvim',
-    event = 'VimEnter',
-    config = function()
-      require('which-key').setup()
-    end,
-  },
 
   -- Import plugins: `lua/plugins/*.lua`
   { import = 'plugins' }

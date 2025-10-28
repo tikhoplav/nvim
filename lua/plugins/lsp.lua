@@ -64,71 +64,107 @@ return {
       end,
     })
 
-    local root_dir = vim.fn.getcwd()
-    local capabilities = vim.lsp.protocol.make_client_capabilities()
-    capabilities = vim.tbl_deep_extend('force', capabilities, require('cmp_nvim_lsp').default_capabilities())
-
-    require('lspconfig').clangd.setup({
-      cmd = { 'clangd' },
-      capabilities = capabilities,
-    })
-
-    require('lspconfig').lua_ls.setup({
-      cmd = { 'docker', 'run', '-i', '--rm', 'tikhoplav/lua-language-server' },
-      capabilities = capabilities,
-    })
-
-    require('lspconfig').rust_analyzer.setup({
-      before_init = function(params)
-        params.processId = vim.NIL
-      end,
-      cmd = { 'docker', 'run', '-i', '--rm', '-v', root_dir .. ':' .. root_dir .. ':z', 'tikhoplav/rust-language-server' },
-      root_dir = function(fname)
-        local util = require('lspconfig').util
-
-        return util.root_pattern('Cargo.toml')(fname)
-          or util.find_git_ancestor(fname)
-      end,
-      capabilities = capabilities,
-    })
-
-    require('lspconfig').vtsls.setup({
-      before_init = function(params)
-        params.processId = vim.NIL
-      end,
-      cmd = { 'docker', 'run', '-i', '--rm', '-v', root_dir .. ':' .. root_dir .. ':z', 'tikhoplav/vtsls-language-server' },
-      filetypes = { 'typescript', 'javascript', 'javascriptreact', 'typescriptreact', 'vue' },
-      settings = {
-        vtsls = {
-          autoUseWorkspaceTsdk = true,
-          tsserver = {
-            globalPlugins = {
-              {
-                name = '@vue/typescript-plugin',
-                location = '/usr/local/lib/node_modules/@vue/language-server',
-                languages = { 'vue' },
-                configNamespace = "typescript",
-                enableForWorkspaceTypeScriptVersions = true,
-              },
-            },
-          },
-        },
-      },
-      capabilities = capabilities,
-    })
-
-    require('lspconfig').wgsl_analyzer.setup({
-      cmd = { 'docker', 'run', '-i', '--rm', 'tikhoplav/wgsl-language-server' },
-      capabilities = capabilities,
-    })
-
-    require('lspconfig').solidity.setup({
-      before_init = function(params)
-        params.processId = vim.NIL
-      end,
-      cmd = { 'docker', 'run', '-i', '--rm', '-v', root_dir .. ':' .. root_dir .. ':z', 'tikhoplav/solidity-language-server' },
-      capabilities = capabilities,
-    })
+    -- local root_dir = vim.fn.getcwd()
+    -- local capabilities = vim.lsp.protocol.make_client_capabilities()
+    -- capabilities = vim.tbl_deep_extend('force', capabilities, require('cmp_nvim_lsp').default_capabilities())
+    --
+    -- require('lspconfig').clangd.setup({
+    --   cmd = { 'clangd' },
+    --   capabilities = capabilities,
+    -- })
+    --
+    -- -- require('lspconfig').zls.setup({
+    -- --   cmd = { 'docker', 'run', '-i', '--rm', 'tikhoplav/zls' },
+    -- --   filetypes = { 'zig', 'zir' },
+    -- --   capabilities = capabilities,
+    -- --   settings = {
+    -- --     zls = {
+    -- --       semantic_tokens = "partial",
+    -- --     },
+    -- --   },
+    -- -- })
+    --
+    -- vim.api.nvim_create_autocmd('BufWritePre', {
+    --   pattern = { "*.zig", "*.zon" },
+    --   callback = function(ev)
+    --     vim.lsp.buf.format()
+    --     vim.lsp.buf.code_action({
+    --       context = { only = { "source.fixAll" }},
+    --       apply = true,
+    --     })
+    --     vim.lsp.buf.code_action({
+    --       context = { only = { "source.organizeImports" }},
+    --       apply = true,
+    --     })
+    --   end
+    -- })
+    --
+    -- require('lspconfig').zls.setup({
+    --   cmd = { 'zls' },
+    --   settings = {
+    --     zls = {
+    --       enable_build_on_save = true,
+    --       semantic_tokens = "partial",
+    --     }
+    --   }
+    -- })
+    --
+    -- require('lspconfig').lua_ls.setup({
+    --   cmd = { 'docker', 'run', '-i', '--rm', 'tikhoplav/lua-language-server' },
+    --   capabilities = capabilities,
+    -- })
+    --
+    -- -- require('lspconfig').rust_analyzer.setup({
+    -- --   before_init = function(params)
+    -- --     params.processId = vim.NIL
+    -- --   end,
+    -- --   cmd = { 'docker', 'run', '-i', '--rm', '-v', root_dir .. ':' .. root_dir .. ':z', 'tikhoplav/rust-language-server' },
+    -- --   root_dir = function(fname)
+    -- --     local util = require('lspconfig').util
+    -- --
+    -- --     return util.root_pattern('Cargo.toml')(fname)
+    -- --       or util.find_git_ancestor(fname)
+    -- --   end,
+    -- --   capabilities = capabilities,
+    -- -- })
+    --
+    -- require('lspconfig').vtsls.setup({
+    --   before_init = function(params)
+    --     params.processId = vim.NIL
+    --   end,
+    --   cmd = { 'docker', 'run', '-i', '--rm', '-v', root_dir .. ':' .. root_dir .. ':z', 'tikhoplav/vtsls-language-server' },
+    --   filetypes = { 'typescript', 'javascript', 'javascriptreact', 'typescriptreact', 'vue' },
+    --   settings = {
+    --     vtsls = {
+    --       autoUseWorkspaceTsdk = true,
+    --       tsserver = {
+    --         globalPlugins = {
+    --           {
+    --             name = '@vue/typescript-plugin',
+    --             location = '/usr/local/lib/node_modules/@vue/language-server',
+    --             languages = { 'vue' },
+    --             configNamespace = "typescript",
+    --             enableForWorkspaceTypeScriptVersions = true,
+    --           },
+    --         },
+    --       },
+    --     },
+    --   },
+    --   capabilities = capabilities,
+    -- })
+    --
+    -- require('lspconfig').wgsl_analyzer.setup({
+    --   cmd = { 'docker', 'run', '-i', '--rm', 'tikhoplav/wgsl-language-server' },
+    --   capabilities = capabilities,
+    -- })
+    --
+    -- require('lspconfig').solidity.setup({
+    --   before_init = function(params)
+    --     params.processId = vim.NIL
+    --   end,
+    --   cmd = { 'docker', 'run', '-i', '--rm', '-v', root_dir .. ':' .. root_dir .. ':z', 'tikhoplav/solidity-language-server' },
+    --   capabilities = capabilities,
+    -- })
   end,
 }
 
